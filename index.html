@@ -1,13 +1,85 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8" />
 	<title>jGithub</title>
 	<script type="text/javascript" src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 	<script type="text/javascript" src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="vendor/handlebars/handlebars.js"></script>
 	<script type="text/javascript" src="script.js"></script>
 	<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/fontawesome/css/font-awesome.css">
 </head>
 <body>
-	<div class="jGithub" data-repo="inkstand/inkstand"></div>
+	<div class="jGithub" data-repo="joeconradt/jGithub"></div>
 </body>
+
+<script id="jGithub-template" type="text/x-handlebars-template">
+<div class="container">
+	<div class="row repo-header">
+		<h3 class="col-sm-12 col-md-6">
+			<a href="{{ repo.owner.html_url }}">{{ repo.owner.login }}</a> / 
+			<a href="{{ repo.html_url }}">{{ repo.name }}</a>
+		</h3> 
+		<div class="col-sm-12 col-md-6" style="padding-top:10px">
+			<div class="btn-group">
+				<a href="#" class="btn btn-default btn-xs"><i class="fa fa-eye"></i> Watchers</a>
+				<a href="#" class="btn btn-default btn-xs">{{ repo.subscribers_count }}</a>
+			</div>
+			<div class="btn-group">
+				<a href="#" class="btn btn-default btn-xs"><i class="fa fa-star"></i> Star</a>
+				<a href="#" class="btn btn-default btn-xs">{{ repo.stargazers_count }}</a>
+			</div>
+			<div class="btn-group">
+				<a href="#" class="btn btn-default btn-xs"><i class="fa fa-code-fork"></i> Fork</a>
+				<a href="#" class="btn btn-default btn-xs">{{ repo.forks_count }}</a>
+			</div>
+		</div>
+	</div>
+	<hr>
+	<p>{{ repo.description }}</p>
+	<hr>
+	<div class="form-group">
+		<div class="input-group">
+			<span class="input-group-addon text-muted"><i class="fa fa-code-fork"></i> branch</span>
+			<select class="form-control js-branch-select" style="width:auto;display:inline-block">
+				{{#each branches}}
+				<option value="{{ this.name }}">{{ this.name }}</option>
+				{{/each}}
+			</select>
+		</div>
+	</div>
+	
+	<div class="repo-content panel panel-default">
+		<div class="panel-heading">Panel heading</div>
+		<div class="file-viewer">
+			<div class="code-lines" style="width:50px;float:left;text-align:right;border-right:1px solid #ccc;padding-right:3px">
+
+			</div>
+			<div class="codes" style="white-space:pre;float:left;padding-left:6px">
+
+			</div>
+		</div>
+		<table class="table">
+			<tbody>
+				{{#each contents }}
+					<tr>
+					{{#equal this.type "dir"}}
+						<td><i class="fa fa-folder-o"></i> <a class="js-file" data-url="{{ this.url }}">{{ this.name }}</a></td>
+					{{/equal}}
+					</tr>
+				{{/each}}
+				{{#each contents }}
+					<tr>
+					{{#equal this.type "file"}}
+						<td><i class="fa fa-file-text-o"></i> <a class="js-file" data-url="{{ this.url }}">{{ this.name }}</a></td>
+					{{/equal}}
+					</tr>
+				{{/each}}
+			</tbody>
+		</table>
+	</div>
+</div>
+</script>
+
 </html>
